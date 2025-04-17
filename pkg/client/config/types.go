@@ -80,6 +80,8 @@ type Server struct {
 }
 
 const defaultAPIBase = "/api/v2"
+const defaultResourceBase = "/resources"
+const defaultKubeProxyBase = "/kubeproxy"
 
 func (s *Server) GetAPIInfo() APIInfo {
 	if s.APIInfo != nil {
@@ -88,6 +90,8 @@ func (s *Server) GetAPIInfo() APIInfo {
 	// Where we have no API info, return something hard-coded to work with v2.4+ WF
 	return APIInfo{
 		NonResourceAPI: defaultAPIBase,
+		ResourceAPI:    defaultResourceBase,
+		KubeProxyAPI:   defaultKubeProxyBase,
 	}
 }
 
