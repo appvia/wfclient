@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-// Package v1alpha1 contains the core api resources
+// Package v2beta1 contains API Schema definitions for the App API group
 // +k8s:deepcopy-gen=package,register
-// +kubebuilder:object:generate=true
-// +groupName=core.appvia.io
-package v1alpha1
+// +groupName=app.appvia.io
+package v2beta1

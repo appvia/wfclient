@@ -1,5 +1,5 @@
 /**
- * Copyright 2025 Appvia Ltd <info@appvia.io>
+ * Copyright 2021 Appvia Ltd <info@appvia.io>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,47 @@ import (
 // we would define them outside the APIs but it just makes the code messier if we do.
 
 const (
+	// AdminWorkspace is the workspace where platform administrative resources live
+	// **IMPORTANT: IF THIS VALUE IS CHANGED, ENSURE THAT ui/lib/utils/workspaces.ts IS ALSO UPDATED
+	AdminWorkspace WorkspaceKey = "admin"
 	// WorkspaceNSPrefix is the prefix given to a workspace key to name the namespace that workspace
 	// owns in the management cluster
+	// **IMPORTANT: IF THIS VALUE IS CHANGED, ENSURE THAT ui/lib/utils/workspaces.ts IS ALSO UPDATED
 	WorkspaceNSPrefix = "ws-"
 )
+
+// These are not yet used, but provide the right interface to workspaced types; on another PR, bring
+// these in and add them to all our workspaced types.
+// // Workspaced is the interface implemented by resources which are workspaced
+// // +kubebuilder:object:generate=false
+// type Workspaced interface {
+// 	// Workspace returns the workspace this object is within, or WorkspaceNone ("") if this is a
+// 	// non-workspaced object
+// 	GetWorkspace() WorkspaceKey
+// 	// SetWorkspace sets the workspace this object is within. This will be disregarded if the object
+// 	// is non-workspaced.
+// 	SetWorkspace(WorkspaceKey)
+// }
+
+// // +kubebuilder:object:generate=false
+// type WorkspacedObject interface {
+// 	Object
+// 	Workspaced
+// }
+
+// // +kubebuilder:object:generate=false
+// type WorkspacedVersionedObject interface {
+// 	Object
+// 	Versioned
+// 	Workspaced
+// }
 
 // WorkspaceKey is the unique identifier for a workspace in Wayfinder. Use .Namespace() to convert
 // to the right name for the workspace's namespace in the management cluster.
 type WorkspaceKey string
 
 // Namespace returns the namespace owned by this workspace in the management cluster.
+// **IMPORTANT: IF THIS LOGIC IS CHANGED, ENSURE THAT ui/lib/utils/workspaces.ts IS ALSO UPDATED
 func (w WorkspaceKey) Namespace() string {
 	if w == "" {
 		return ""
@@ -93,6 +124,7 @@ func (w WorkspaceKeys) KeyList() []string {
 
 // ToWorkspace returns the name of the workspace which owns the specified namespace in the
 // management cluster
+// **IMPORTANT: IF THIS LOGIC IS CHANGED, ENSURE THAT ui/lib/utils/workspaces.ts IS ALSO UPDATED
 func ToWorkspace(namespace string) WorkspaceKey {
 	if strings.HasPrefix(namespace, WorkspaceNSPrefix) {
 		return WorkspaceKey(namespace[len(WorkspaceNSPrefix):])

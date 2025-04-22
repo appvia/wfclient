@@ -1,5 +1,5 @@
 /**
- * Copyright 2025 Appvia Ltd <info@appvia.io>
+ * Copyright 2021 Appvia Ltd <info@appvia.io>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -243,4 +243,33 @@ func (s *CommonStatus) LastReconcileRefresh() string {
 // +kubebuilder:object:generate=false
 type CommonStatusAware interface {
 	GetCommonStatus() *CommonStatus
+}
+
+// DNSEntry represents a Wayfinder-generated DNS entry for a resource.
+type DNSEntry struct {
+	// Prefix is the user-specified prefix of the DNS entry
+	Prefix string `json:"prefix,omitempty"`
+	// Public indicates if the DNS entry is public, if false, the entry is private.
+	Public bool `json:"public"`
+	// Host is the host of the DNS entry
+	Host string `json:"host"`
+}
+
+func (d *DNSEntry) Equals(other *DNSEntry) bool {
+	if d == nil && other == nil {
+		return true
+	}
+	if d == nil && other != nil {
+		return false
+	}
+	if d != nil && other == nil {
+		return false
+	}
+	return d.Public == other.Public && d.Prefix == other.Prefix && d.Host == other.Host
+}
+
+// DNSEntryAware is implemented by any Wayfinder resource which outputs DNS entries.
+// +kubebuilder:object:generate=false
+type DNSEntryAware interface {
+	GetDNSEntries() []DNSEntry
 }

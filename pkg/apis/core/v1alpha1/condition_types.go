@@ -1,5 +1,5 @@
 /**
- * Copyright 2025 Appvia Ltd <info@appvia.io>
+ * Copyright 2021 Appvia Ltd <info@appvia.io>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -210,6 +210,31 @@ type Condition struct {
 	// the 'normal'/'successful' status. This will be the case for conditions such as 'Deployed'
 	// +optional
 	NegativePolarity bool `json:"negativePolarity,omitempty"`
+
+	// LogDetails provides the parameters to retrieve logs from the logs subresource of this resource
+	// if logs are available for this condition. If unpopulated, no logs are available or relevant to this
+	// condition.
+	// +optional
+	LogDetails *LogDetails `json:"logDetails,omitempty"`
+}
+
+// LogDetails provides the parameters to retrieve logs from the logs subresource of this resource
+// if logs are available for this condition. If unpopulated, no logs are available or relevant to this
+// condition.
+type LogDetails struct {
+	// RunID is the ID of the run that this condition relates to. If the process is still running,
+	// this can be used with the logs subresource of this resource to stream the logs.
+	// +optional
+	RunID string `json:"runID,omitempty"`
+	// Steps is a list of steps of the run relevant to this condition.
+	// +optional
+	Steps []string `json:"steps,omitempty"`
+	// LastCompletedLog provides the logs of the last completed operation relevant to this condition
+	// if available. This will only be updated when the condition completes processing. During
+	// processing, use the RunID and Steps above to stream the logs from this resource's logs
+	// subresource.
+	// +optional
+	LastCompletedLog string `json:"lastCompletedLog,omitempty"`
 }
 
 // MessageDetail returns the message and, if specified, the detail in a single formatted string, for

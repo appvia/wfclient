@@ -14,8 +14,21 @@
  * limitations under the License.
  */
 
-// Package v1alpha1 contains the core api resources
-// +k8s:deepcopy-gen=package,register
-// +kubebuilder:object:generate=true
-// +groupName=core.appvia.io
 package v1alpha1
+
+const (
+	// SecretTypeGeneric is a secret
+	SecretTypeGeneric = "generic"
+	// SecretTypeAWS contains a aws credential
+	SecretTypeAWS = "aws"
+	// SecretTypeAzure contains a azure credentials and fields
+	SecretTypeAzure = "azure"
+	// SecretTypeGCP contains a gcp service account
+	SecretTypeGCP = "gcp"
+	// SecretTypeKubernetes contains kubernetes credentials
+	SecretTypeKubernetes = "kubernetes"
+	// SecretTypeSSHKey contains an ssh key
+	SecretTypeSSHKey = "ssh-key"
+	// SecretTypeGit provides credentials to clone from a git repository
+	SecretTypeGit = "git"
+)

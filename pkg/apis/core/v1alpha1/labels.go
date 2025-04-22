@@ -14,8 +14,29 @@
  * limitations under the License.
  */
 
-// Package v1alpha1 contains the core api resources
-// +k8s:deepcopy-gen=package,register
-// +kubebuilder:object:generate=true
-// +groupName=core.appvia.io
 package v1alpha1
+
+import "fmt"
+
+const (
+	// WFLabelPrefix is the prefix used for all Wayfinder labels
+	WFLabelPrefix = "appvia.io"
+)
+
+// Label returns a wayfinder label on a resource
+func Label(tag string) string {
+	return fmt.Sprintf("%s/%s", WFLabelPrefix, tag)
+}
+
+// NamedLabel returns a wayfinder named label on a resource
+func NamedLabel(name, tag string) string {
+	return fmt.Sprintf("%s.%s/%s", name, WFLabelPrefix, tag)
+}
+
+var (
+	// LabelVersionOf is the name that a versioned resource is a version of
+	LabelVersionOf = Label("versionOf")
+
+	// LabelZoneType is the type of zone
+	LabelZoneType = Label("zoneType")
+)

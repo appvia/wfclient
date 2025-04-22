@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-// Package v1alpha1 contains the core api resources
-// +k8s:deepcopy-gen=package,register
-// +kubebuilder:object:generate=true
-// +groupName=core.appvia.io
 package v1alpha1
+
+const (
+	ConditionReconcilePaused ConditionType = "Paused"
+)
+
+var ReconcilePausedCondition = ConditionSpec{
+	Type: ConditionReconcilePaused,
+	Name: "Reconciliation paused",
+}

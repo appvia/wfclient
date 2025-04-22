@@ -1,5 +1,5 @@
 /**
- * Copyright 2025 Appvia Ltd <info@appvia.io>
+ * Copyright 2021 Appvia Ltd <info@appvia.io>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,6 +90,37 @@ type VersionedObject interface {
 func IsVersioned(obj Object) bool {
 	_, ok := obj.(Versioned)
 	return ok
+}
+
+// PrepareVersionedObjectForStorage prepares a versioned object for storage by setting the name to
+// include the version and adding a VersionOf label to store the user-facing name.
+func PrepareVersionedObjectForStorage(obj VersionedObject) {
+	if obj.GetLabels() == nil {
+		obj.SetLabels(map[string]string{})
+	}
+	obj.GetLabels()[LabelVersionOf] = obj.GetName()
+	obj.SetName(obj.GetVersion().ToVersionedName(obj.GetName()))
+}
+
+// PrepareVersionedObjectForUser prepares a versioned object for user consumption by replacing the
+// underlying versioned name with the user-facing name from the versionOf label.
+func PrepareVersionedObjectForUser(obj VersionedObject) {
+	// no-op if this doesn't have the versionOf label
+	if obj.GetLabels()[LabelVersionOf] == "" {
+		return
+	}
+	obj.SetName(obj.GetLabels()[LabelVersionOf])
+	delete(obj.GetLabels(), LabelVersionOf)
+}
+
+// GetVersionedObjectName returns the user-facing name of the object that this versioned object is a
+// version of. If no 'VersionOf' label is set, it will default to returning the object name, which
+// will be correct for legacy unversioned objects.
+func GetVersionedObjectName(obj Object) string {
+	if obj.GetLabels()[LabelVersionOf] == "" {
+		return obj.GetName()
+	}
+	return obj.GetLabels()[LabelVersionOf]
 }
 
 // GetVersion returns the version of the provided object, or an empty string if the object is not

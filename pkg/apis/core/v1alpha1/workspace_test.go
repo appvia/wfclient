@@ -14,8 +14,32 @@
  * limitations under the License.
  */
 
-// Package v1alpha1 contains the core api resources
-// +k8s:deepcopy-gen=package,register
-// +kubebuilder:object:generate=true
-// +groupName=core.appvia.io
 package v1alpha1
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestWorkspaceNamespace(t *testing.T) {
+	ws := WorkspaceKey("horse")
+	assert.Equal(t, "ws-horse", ws.Namespace())
+
+	ws = WorkspaceKey("admin")
+	assert.Equal(t, "ws-admin", ws.Namespace())
+
+	ws = WorkspaceKey("")
+	assert.Equal(t, "", ws.Namespace())
+}
+
+func TestToWorkspace(t *testing.T) {
+	ws := ToWorkspace("ws-horse")
+	assert.Equal(t, "horse", ws.Key())
+
+	ws = ToWorkspace("ws-admin")
+	assert.Equal(t, "admin", ws.Key())
+
+	ws = ToWorkspace("cheese")
+	assert.Equal(t, "cheese", ws.Key())
+}
