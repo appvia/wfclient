@@ -17,7 +17,7 @@
 package v2beta1
 
 import (
-	corev1 "github.com/appvia/wayfinder/pkg/apis/core/v1alpha1"
+	corev1 "github.com/appvia/wfclient/pkg/apis/core/v1alpha1"
 )
 
 const (
